@@ -1,15 +1,3 @@
-# signalr.with.dotnet.core.and.angular
-
-
-# Angular App
-
-- Install signalR package
-
-```
-npm i @aspnet/signalr --save
-```
-
-```
 import { Component, OnInit } from '@angular/core';
 import { HubConnection } from '@aspnet/signalr';
 import * as signalR from '@aspnet/signalr';
@@ -60,5 +48,3 @@ export class AppComponent implements OnInit {
     }).catch(err => console.log(err));
   }
 }
-
-```
