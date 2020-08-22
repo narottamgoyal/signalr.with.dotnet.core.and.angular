@@ -13,38 +13,49 @@ export class AppComponent implements OnInit {
 
   public ngOnInit() {
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl("http://localhost:50930/pushNotification").build();
+      .withUrl('http://localhost:50930/pushNotification').build();
 
     this.hubConnection.start().then(() => {
-      console.log("connection started");
+      console.log('connection started');
     }).catch(err => console.log(err));
 
     this.hubConnection.onclose(() => {
       debugger;
       setTimeout(() => {
+        console.log('try to re start connection');
         debugger;
         this.hubConnection.start().then(() => {
           debugger;
-          console.log("connection started");
+          console.log('connection re started');
         }).catch(err => console.log(err));
       }, 5000);
     });
 
-    this.hubConnection.on("clientMethodName", (data) => {
+    this.hubConnection.on('privateMessageMethodName', (data) => {
       debugger;
-      console.log(data);
+      console.log('private Message:' + data);
     });
 
-    this.hubConnection.on("WelcomeMethodName", (data) => {
+    this.hubConnection.on('publicMessageMethodName', (data) => {
       debugger;
-      console.log(data);
-      this.hubConnection.invoke("GetDataFromClient", "user id", data).catch(err => console.log(err));
+      console.log('public Message:' + data);
+    });
+
+    this.hubConnection.on('clientMethodName', (data) => {
+      debugger;
+      console.log('server message:' + data);
+    });
+
+    this.hubConnection.on('WelcomeMethodName', (data) => {
+      debugger;
+      console.log('client Id:' + data);
+      this.hubConnection.invoke('GetDataFromClient', 'abc@abc.com', data).catch(err => console.log(err));
     });
   }
 
   public stopConnection() {
-    this.hubConnection.start().then(() => {
-      console.log("stopped");
+    this.hubConnection.stop().then(() => {
+      console.log('stopped');
     }).catch(err => console.log(err));
   }
 }
